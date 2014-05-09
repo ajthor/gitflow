@@ -1,7 +1,9 @@
-#include "include/git2.h"
+#include <stddef.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 
-#include "semver.h"
-#include "run_command.h"
+#include "include/git2.h"
 
 #include "gitflow-branch.h"
 #include "gitflow-feature.h"
@@ -9,10 +11,8 @@
 #include "gitflow-init.h"
 #include "gitflow-status.h"
 
-#include <stddef.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
+#include "semver.h"
+#include "run_command.h"
 
 #define ARRAY_SIZE(x) (sizeof(x)/sizeof(x[0]))
 
@@ -44,7 +44,7 @@ static void check_error(int code, const char * action) {
 // options relevant to this routine. Some of the flags or options may 
 // apply to the command specified, in which case, pass those along to 
 // the next command.
-static int handle_options(int argc, char const **argv[], int *envchanged) {
+static int handle_options(int argc, char const **argv[]) {
 	return 1;
 }
 
@@ -85,15 +85,10 @@ static char const * extract_command(int argc, char const *argv[]) {
 			// for a command.
 		}
 		else {
-			// Not a flag or an option. Cycle through all commands 
-			// and find which one this is.
 			for(j = ARRAY_SIZE(commands) - 1; j >= 0; j--) {
 				s = &commands[j];
 
-				// printf("%s = %s?\n", argv[i], s->cmd);
-
 				if( !strcmp(argv[i], s->cmd) ) {
-					// printf("YES\n");
 					return argv[i];
 				}
 			}
@@ -115,7 +110,7 @@ static int is_builtin(char const * cmd) {
 	int i;
 	int len;
 	char const ** s;
-	// Evaluate if the command is a script or a git command.
+
 	for(i = 0, len = ARRAY_SIZE(builtin_commands); i < len; i++) {
 		s = &builtin_commands[i];
 		if(!strcmp(cmd, *s))
@@ -130,14 +125,10 @@ static int is_builtin(char const * cmd) {
 int run_command(char const * cmd, int argc, char const * argv[]) {
 
 	if(is_builtin(cmd)) {
-		// GitFlow command.
-		printf("GitFlow, huzzah!\n");
-		// return exec_gitflow_command(cmd, argc, argv);
+		return exec_gitflow_command(cmd, argc, argv);
 	}
 	else {
-		// Shell command.
-		printf("Shell!\n");
-		// return exec_shell_command(cmd, argc, argv);
+		return exec_shell_command(cmd, argc, argv);
 	}
 
 	return 1;
@@ -167,22 +158,18 @@ static void show_usage() {
 int main(int argc, char const * argv[])
 {
 	char const * cmd;
-	// char const * new_argv[];
 
 	if(argc < 2) {
 		return 1;
 	}
 
 	cmd = extract_command(argc, argv);
-	
-	printf("Command: %s\n", cmd);
 
 	if(!strcmp(cmd, "help")) {
 		show_usage();
 	}
 	else {
-		// User doesn't need help. Run a command!
-		run_command(cmd, argc, argv);
+		return run_command(cmd, argc, argv);
 	}
 
 	return 0;
