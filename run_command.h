@@ -1,14 +1,14 @@
-static char const * builtin_commands[] = {
+static const char * builtin_commands[] = {
 };
 
-static char const * shell_commands[] = {
+static const char * shell_commands[] = {
 	"feature",
 	"patch",
 	"gh-pages",
 	"init"
 };
 
-extern int exec_gitflow_command(char const * cmd, int argc, char const * argv[]);
-extern int exec_shell_command(char const * cmd, int argc, char const * argv[]);
+extern int exec_gitflow_command(const char * cmd, int argc, const char * argv[]);
+extern int exec_shell_command(const char * cmd, int argc, const char * argv[]);
 
 

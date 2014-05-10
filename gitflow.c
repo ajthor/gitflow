@@ -44,7 +44,7 @@ static void check_error(int code, const char * action) {
 // options relevant to this routine. Some of the flags or options may 
 // apply to the command specified, in which case, pass those along to 
 // the next command.
-static int handle_options(int argc, char const **argv[]) {
+static int handle_options(int argc, const char **argv[]) {
 	return 1;
 }
 
@@ -71,7 +71,7 @@ static command commands[] = {
 // for one that matches a command listed in the commands array. If no 
 // matches are found, search through aliases to find commands that 
 // are possible mistyped or shortened intentionally.
-static char const * extract_command(int argc, char const *argv[]) {
+static const char * extract_command(int argc, const char *argv[]) {
 	int i = 0;
 	int j = 0;
 	int len = argc;
@@ -106,10 +106,10 @@ static char const * extract_command(int argc, char const *argv[]) {
 	return "help";
 }
 
-static int is_builtin(char const * cmd) {
+static int is_builtin(const char * cmd) {
 	int i;
 	int len;
-	char const ** s;
+	const char ** s;
 
 	for(i = 0, len = ARRAY_SIZE(builtin_commands); i < len; i++) {
 		s = &builtin_commands[i];
@@ -122,7 +122,7 @@ static int is_builtin(char const * cmd) {
 
 // Run_Command Function
 // --------------------
-int run_command(char const * cmd, int argc, char const * argv[]) {
+int run_command(const char * cmd, int argc, const char * argv[]) {
 
 	if(is_builtin(cmd)) {
 		return exec_gitflow_command(cmd, argc, argv);
@@ -155,9 +155,9 @@ static void show_usage() {
 // Entry point into the application. Handles the CLI input. Searches 
 // for the command passed to the function and passes it and any 
 // arguments which may pertain to it to a new child process.
-int main(int argc, char const * argv[])
+int main(int argc, const char * argv[])
 {
-	char const * cmd;
+	const char * cmd;
 
 	if(argc < 2) {
 		return 1;
