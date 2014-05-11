@@ -8,7 +8,7 @@ static const char * shell_commands[] = {
 	"init"
 };
 
-extern int exec_gitflow_command(const char * cmd, int argc, const char * argv[]);
-extern int exec_shell_command(const char * cmd, int argc, const char * argv[]);
+extern int exec_gitflow_command(const char *, int, const char **);
+extern int exec_shell_command(const char *, int, const char **);
 
 
