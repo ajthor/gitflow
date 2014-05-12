@@ -17,8 +17,7 @@
 #define ARRAY_SIZE(x) (sizeof(x)/sizeof(x[0]))
 
 const char usage[] = 
-	"gitflow \n"
-	"        <command> [<args>]\n";
+	"gitflow <command> [<args>]\n";
 
 const char help[] =
 	"GitFlow is a command-line Git workflow helper that uses the\n" 
@@ -44,8 +43,16 @@ static void check_error(int code, const char * action) {
 // options relevant to this routine. Some of the flags or options may 
 // apply to the command specified, in which case, pass those along to 
 // the next command.
-static int handle_options(int argc, const char **argv[]) {
-	return 1;
+static const char ** handle_options(const char * cmd, int argc, const char * argv[]) {
+	int i;
+	const char ** new_argv;
+	new_argv = malloc(sizeof(new_argv) * (argc + 4));
+
+	for(i = 2; i < argc; i++) {
+		new_argv[i - 2] = argv[i];
+	}
+
+	return new_argv;
 }
 
 // Command Structure
@@ -71,7 +78,7 @@ static command commands[] = {
 // for one that matches a command listed in the commands array. If no 
 // matches are found, search through aliases to find commands that 
 // are possible mistyped or shortened intentionally.
-static const char * extract_command(int argc, const char *argv[]) {
+static const char * extract_command(int argc, const char * argv[]) {
 	int i = 0;
 	int j = 0;
 	int len = argc;
@@ -82,7 +89,10 @@ static const char * extract_command(int argc, const char *argv[]) {
 
 		if(argv[i][0] == '-') {
 			// This is a flag or an option. No need to search it 
-			// for a command.
+			// for a command. Just check if the user needs help.
+			if(!strcmp(argv[i], '-h') || !strcmp(argv[i], '--help')) {
+				return "help";
+			}
 		}
 		else {
 			for(j = ARRAY_SIZE(commands) - 1; j >= 0; j--) {
@@ -122,13 +132,13 @@ static int is_builtin(const char * cmd) {
 
 // Run_Command Function
 // --------------------
-int run_command(const char * cmd, int argc, const char * argv[]) {
+int run_command(const char * cmd, const char * argv[]) {
 
 	if(is_builtin(cmd)) {
-		return exec_gitflow_command(cmd, argc, argv);
+		return exec_gitflow_command(cmd, argv);
 	}
 	else {
-		return exec_shell_command(cmd, argc, argv);
+		return exec_shell_command(cmd, argv);
 	}
 
 	return 1;
@@ -158,6 +168,7 @@ static void show_usage() {
 int main(int argc, const char * argv[])
 {
 	const char * cmd;
+	const char ** new_argv;
 
 	if(argc < 2) {
 		return 1;
@@ -165,13 +176,18 @@ int main(int argc, const char * argv[])
 
 	cmd = extract_command(argc, argv);
 
+	new_argv = handle_options(cmd, argc, argv);
+
 	if(!strcmp(cmd, "help")) {
 		show_usage();
 	}
 	else {
-		return run_command(cmd, argc, argv);
+		return run_command(cmd, new_argv);
 	}
+
+	free(new_argv);
 
 	return 0;
 }
+
 

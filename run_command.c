@@ -97,12 +97,12 @@ static int exec_command(const char * cmd, char * const argv[]) {
 	return 1;
 }
 
-int exec_gitflow_command(const char * cmd, int argc, const char ** argv) {
+int exec_gitflow_command(const char * cmd, const char ** argv) {
 	// Call child process.
 	return 0;
 }
 
-int exec_shell_command(const char * cmd, int argc, const char ** argv) {
+int exec_shell_command(const char * cmd, const char ** argv) {
 	char * shell_cmd = prepare_shell_command(cmd);
 	const char ** new_argv = prepare_command(shell_cmd, argv);
 
