@@ -48,7 +48,7 @@ static const char ** prepare_command(const char * cmd, const char ** argv) {
 #else
 	new_argv[new_argc++] = "sh";
 #endif
-	new_argv[new_argc++] = "-c";
+	// new_argv[new_argc++] = "-c";
 
 	new_argv[new_argc++] = cmd;
 
