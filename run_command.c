@@ -66,13 +66,9 @@ static int exec_command(const char * cmd, char * const argv[]) {
 	pid_t my_pid, parent_pid, child_pid;
 	int child_status;
 
-	int i, argc;
+	int argc;
 	for(argc = 0; argv[argc]; argc++) 
 		;
-
-	for(i = 0; i < argc; i++) {
-		printf("%s\n", argv[i]);
-	}
 
 	my_pid = getpid();
 	parent_pid = getppid();
