@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -22,18 +23,6 @@ const char help[] =
 	"core functionality of Git to provide wrappers for basic \n"
 	"development workflow tasks.\n";
 
-// Check_Error Function
-// --------------------
-static void check_error(int code, const char * action) {
-	const git_error * error = giterr_last();
-	if(!code)
-		return;
-
-	printf("Error [ %d ](%s): %s", code, action,
-		(error && error->message) ? error->message : "An unexpected error occurred.");
-
-	exit(1);
-}
 
 // Handle_Options Function
 // -----------------------
@@ -88,7 +77,7 @@ static const char * extract_command(int argc, const char * argv[]) {
 		if(argv[i][0] == '-') {
 			// This is a flag or an option. No need to search it 
 			// for a command. Just check if the user needs help.
-			if(!strcmp(argv[i], '-h') || !strcmp(argv[i], '--help')) {
+			if(!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")) {
 				return "help";
 			}
 		}
