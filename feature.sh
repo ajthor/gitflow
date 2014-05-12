@@ -1,5 +1,34 @@
 #!/bin/sh
 
-name=$1
+USAGE="gitflow feature <feature_name> [-d] [-m] [<destination_branch>]"
 
-echo "Hello, ${name}, I am a shell script!"
+delete=
+merge=
+
+while test $# != 0
+do
+
+	case "$1" in
+	-d)
+		delete=1
+		;;
+	-m)
+		merge=1
+		;;
+	*)
+		echo ${USAGE}
+		;;
+	esac
+	shift
+
+done
+
+if [[ $merge ]]; then
+	#statements
+	echo "merge"
+fi
+
+if [[ $delete ]]; then
+	#statements
+	echo "delete"
+fi
