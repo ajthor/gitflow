@@ -3,8 +3,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "include/git2.h"
-
 #include "gitflow-branch.h"
 #include "gitflow-feature.h"
 #include "gitflow-gh-pages.h"
