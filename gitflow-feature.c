@@ -11,7 +11,7 @@ static void show_usage() {
 	printf("%s\n", usage);
 }
 
-int main(int argc, char const *argv[])
+int main(int argc, const char *argv[])
 {
 	printf("Running!");
 	return 0;

@@ -1,7 +1,9 @@
-#include "include/git2.h"
+#include <stddef.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 
-#include "semver.h"
-#include "run_command.h"
+#include "include/git2.h"
 
 #include "gitflow-branch.h"
 #include "gitflow-feature.h"
@@ -9,16 +11,13 @@
 #include "gitflow-init.h"
 #include "gitflow-status.h"
 
-#include <stddef.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
+#include "semver.h"
+#include "run_command.h"
 
 #define ARRAY_SIZE(x) (sizeof(x)/sizeof(x[0]))
 
 const char usage[] = 
-	"gitflow \n"
-	"        <command> [<args>]\n";
+	"gitflow <command> [<args>]\n";
 
 const char help[] =
 	"GitFlow is a command-line Git workflow helper that uses the\n" 
@@ -44,8 +43,16 @@ static void check_error(int code, const char * action) {
 // options relevant to this routine. Some of the flags or options may 
 // apply to the command specified, in which case, pass those along to 
 // the next command.
-static int handle_options(int argc, char const **argv[], int *envchanged) {
-	return 1;
+static const char ** handle_options(const char * cmd, int argc, const char * argv[]) {
+	int i;
+	const char ** new_argv;
+	new_argv = malloc(sizeof(new_argv) * (argc + 4));
+
+	for(i = 2; i < argc; i++) {
+		new_argv[i - 2] = argv[i];
+	}
+
+	return new_argv;
 }
 
 // Command Structure
@@ -71,7 +78,7 @@ static command commands[] = {
 // for one that matches a command listed in the commands array. If no 
 // matches are found, search through aliases to find commands that 
 // are possible mistyped or shortened intentionally.
-static char const * extract_command(int argc, char const *argv[]) {
+static const char * extract_command(int argc, const char * argv[]) {
 	int i = 0;
 	int j = 0;
 	int len = argc;
@@ -82,18 +89,16 @@ static char const * extract_command(int argc, char const *argv[]) {
 
 		if(argv[i][0] == '-') {
 			// This is a flag or an option. No need to search it 
-			// for a command.
+			// for a command. Just check if the user needs help.
+			if(!strcmp(argv[i], '-h') || !strcmp(argv[i], '--help')) {
+				return "help";
+			}
 		}
 		else {
-			// Not a flag or an option. Cycle through all commands 
-			// and find which one this is.
 			for(j = ARRAY_SIZE(commands) - 1; j >= 0; j--) {
 				s = &commands[j];
 
-				// printf("%s = %s?\n", argv[i], s->cmd);
-
 				if( !strcmp(argv[i], s->cmd) ) {
-					// printf("YES\n");
 					return argv[i];
 				}
 			}
@@ -111,11 +116,11 @@ static char const * extract_command(int argc, char const *argv[]) {
 	return "help";
 }
 
-static int is_builtin(char const * cmd) {
+static int is_builtin(const char * cmd) {
 	int i;
 	int len;
-	char const ** s;
-	// Evaluate if the command is a script or a git command.
+	const char ** s;
+
 	for(i = 0, len = ARRAY_SIZE(builtin_commands); i < len; i++) {
 		s = &builtin_commands[i];
 		if(!strcmp(cmd, *s))
@@ -127,17 +132,13 @@ static int is_builtin(char const * cmd) {
 
 // Run_Command Function
 // --------------------
-int run_command(char const * cmd, int argc, char const * argv[]) {
+int run_command(const char * cmd, const char * argv[]) {
 
 	if(is_builtin(cmd)) {
-		// GitFlow command.
-		printf("GitFlow, huzzah!\n");
-		// return exec_gitflow_command(cmd, argc, argv);
+		return exec_gitflow_command(cmd, argv);
 	}
 	else {
-		// Shell command.
-		printf("Shell!\n");
-		// return exec_shell_command(cmd, argc, argv);
+		return exec_shell_command(cmd, argv);
 	}
 
 	return 1;
@@ -164,27 +165,29 @@ static void show_usage() {
 // Entry point into the application. Handles the CLI input. Searches 
 // for the command passed to the function and passes it and any 
 // arguments which may pertain to it to a new child process.
-int main(int argc, char const * argv[])
+int main(int argc, const char * argv[])
 {
-	char const * cmd;
-	// char const * new_argv[];
+	const char * cmd;
+	const char ** new_argv;
 
 	if(argc < 2) {
 		return 1;
 	}
 
 	cmd = extract_command(argc, argv);
-	
-	printf("Command: %s\n", cmd);
+
+	new_argv = handle_options(cmd, argc, argv);
 
 	if(!strcmp(cmd, "help")) {
 		show_usage();
 	}
 	else {
-		// User doesn't need help. Run a command!
-		run_command(cmd, argc, argv);
+		return run_command(cmd, new_argv);
 	}
+
+	free(new_argv);
 
 	return 0;
 }
+
 
