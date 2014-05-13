@@ -1,6 +1,6 @@
 #!/bin/sh
 
-USAGE="gitflow feature <branch_name> [-d | --delete] [-m | --merge] [<destination_branch>]"
+USAGE="usage: gitflow feature <branch_name> [-d | --delete] [-m | --merge] [<destination_branch>]\n\n"
 
 delete=
 merge=
@@ -21,6 +21,15 @@ do
 		dev | develop | development | master)
 			dest="$1"
 			;;
+		-h | --help)
+			printf "${USAGE}"
+			exit 0
+			;;
+		-*)
+			printf "Unknown option.\n"
+			printf "${USAGE}"
+			exit 1
+			;;
 		*)
 			branch="$1"
 
@@ -30,10 +39,6 @@ do
 				exit 1
 			fi
 			# Is branch a branch that currently exists?
-			;;
-		-h | --help)
-			printf "Unknown option.\n"
-			printf "${USAGE}"
 			;;
 	esac
 	shift

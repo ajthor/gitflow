@@ -50,10 +50,10 @@ OBJECTS = $(SOURCES:.c=.o)
 SCRIPT_DIR = ./scripts
 
 SCRIPT_SH += $(SCRIPT_DIR)/feature.sh
-# SCRIPT_SH += $(SCRIPT_DIR)/gh-pages.sh
-# SCRIPT_SH += $(SCRIPT_DIR)/init.sh
-# SCRIPT_SH += $(SCRIPT_DIR)/patch.sh
-# SCRIPT_SH += $(SCRIPT_DIR)/release.sh
+SCRIPT_SH += $(SCRIPT_DIR)/gh-pages.sh
+SCRIPT_SH += $(SCRIPT_DIR)/init.sh
+SCRIPT_SH += $(SCRIPT_DIR)/patch.sh
+SCRIPT_SH += $(SCRIPT_DIR)/release.sh
 
 SCRIPT_SH_GEN = $(patsubst %.sh,%,$(SCRIPT_SH))
 
