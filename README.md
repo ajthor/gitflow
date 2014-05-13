@@ -92,6 +92,10 @@ The `gh-pages` command is specific to the documentation branch on GitHub. It cre
 - -c: make a first commit (even if it's empty)
 
 
+## Contributing
+
+The project is under active development. Please contribute! I am not, in any sense, a good C or BASH developer. It would be useful to get some feedback and review on those parts of the program.
+
 
 ## Un-Installation
 
