@@ -1,6 +1,6 @@
 #!/bin/sh
 
-USAGE="gitflow gh-pages [-c | --commit]"
+USAGE="gitflow gh-pages [-c | --commit]\n\n"
 
 firstcommit=
 
@@ -11,9 +11,15 @@ do
 		-c | --commit)
 			firstcommit=1
 			;;
-		-h | --help | *)
+		-h | --help)
+			printf "${USAGE}"
+			exit 0
+			;;
+		*)
 			printf "Unknown option.\n"
 			printf "${USAGE}"
+			exit 1
+			;;
 	esac
 	shift
 

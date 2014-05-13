@@ -1,6 +1,6 @@
 #!/bin/sh
 
-USAGE="gitflow init [-c | --commit] [-g | --gh-pages] <remote_url>"
+USAGE="gitflow init [-c | --commit] [-g | --gh-pages] <remote_url>\n\n"
 
 ghpages=
 remoteUrl=
@@ -17,11 +17,17 @@ do
 		-c | --commit)
 			firstcommit=1
 			;;
-		https://*.git | git@*.git)
+		https://*.git | git@*.git || ssh://*.git)
 			remoteUrl="$1"
-		-h | --help | *)
+			;;
+		-h | --help)
+			printf "${USAGE}"
+			exit 0
+			;;
+		-*)
 			printf "Unknown option.\n"
 			printf "${USAGE}"
+			exit 1
 			;;
 	esac
 	shift

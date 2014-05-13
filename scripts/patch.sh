@@ -17,12 +17,17 @@ do
 		-m | --merge)
 			merge=1
 			;;
-		*)
-			branch="issue-#${1#issue-*}"
-			;;
 		-h | --help)
+			printf "${USAGE}"
+			exit 0
+			;;
+		-*)
 			printf "Unknown option.\n"
 			printf "${USAGE}"
+			exit 1
+			;;
+		*)
+			branch="issue-#${1#issue-*}"
 			;;
 	esac
 	shift

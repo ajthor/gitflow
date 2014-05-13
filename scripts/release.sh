@@ -1,6 +1,6 @@
 #!/bin/sh
 
-USAGE="gitflow release <semver_tag> [-d | --delete] [-m | --merge]"
+USAGE="gitflow release <semver_tag> [-d | --delete] [-m | --merge]\n\n"
 
 delete=
 merge=
@@ -23,16 +23,21 @@ do
 			branch="release-$1"
 			;;
 		-h | --help)
+			printf "${USAGE}"
+			exit 0
+			;;
+		*)
 			printf "Unknown option.\n"
 			printf "${USAGE}"
+			exit 1
 			;;
 	esac
 	shift
 
 done
 
-if [ -z branch ]; then
-	printf "Must supply a <version> to release command."
+if [ -z "$branch" ]; then
+	printf "Must supply a <semver_tag> to release command."
 	exit 1
 else
 	git checkout -b "$branch" development
