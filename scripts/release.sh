@@ -1,10 +1,11 @@
 #!/bin/sh
 
-USAGE="usage: gitflow patch <issue_number> [-d | --delete] [-m | --merge]\n\n"
+USAGE="gitflow release <semver_tag> [-d | --delete] [-m | --merge]"
 
 delete=
 merge=
 
+version=
 branch=
 
 while test $# != 0
@@ -17,8 +18,9 @@ do
 		-m | --merge)
 			merge=1
 			;;
-		*)
-			branch="issue-#${1#issue-*}"
+		v*.*.*)
+			version="$1"
+			branch="release-$1"
 			;;
 		-h | --help)
 			printf "Unknown option.\n"
@@ -29,20 +31,30 @@ do
 
 done
 
-echo "issue: $branch"
+if [ -z branch ]; then
+	printf "Must supply a <version> to release command."
+	exit 1
+else
+	git checkout -b "$branch" development
+fi
 
 if [[ $merge ]]; then
+	#statements
 	printf "Merge: $branch .. master"
+	git pull origin master &&
 	git checkout master &&
 	git merge --no-ff "$branch" &&
 	git push
 
-	# Create tag for patch.
+	printf "Tag: $version"
+	git tag -a "$version" &&
+	git push --tags
 
 	printf "Merge: $branch .. development"
+	git pull origin development &&
 	git checkout development &&
 	git merge --no-ff "$branch" &&
-	git push
+	git push 
 fi
 
 if [[ $delete ]]; then

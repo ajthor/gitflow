@@ -11,6 +11,10 @@ while test $# != 0
 do
 
 	case "$1" in
+		-h | --help)
+			printf "Unknown option.\n"
+			printf "${USAGE}"
+			;;
 		-g | --gh-pages)
 			ghpages=1
 			;;
@@ -19,21 +23,17 @@ do
 			;;
 		https://*.git | git@*.git)
 			remoteUrl="$1"
-		-h | --help | *)
-			printf "Unknown option.\n"
-			printf "${USAGE}"
-			;;
 	esac
 	shift
 
 done
 
-git init
+git init &&
+git remote add origin "$remoteUrl"
 
 if [[ $firstcommit ]]; then
 	# Make first commit.
-	git status
-	git add . &&
+	git add .
 	git commit -a -m "initial commit"
 
 	git push origin master
@@ -48,9 +48,9 @@ if [[ $ghpages ]]; then
 	fi
 fi
 
-git checkout -b development master &&
-git push -u origin development
+git branch development
+git checkout development
 
-git remote add origin "$remoteUrl"
+git push -u origin development
 
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-USAGE="gitflow feature <branch_name> [-d] [-m] [<destination_branch>]"
+USAGE="gitflow feature <branch_name> [-d | --delete] [-m | --merge] [<destination_branch>]"
 
 delete=
 merge=
@@ -12,10 +12,6 @@ while test $# != 0
 do
 
 	case "$1" in
-		-h | --help)
-			printf "Unknown option.\n"
-			printf "${USAGE}"
-			;;
 		-d | --delete)
 			delete=1
 			;;
@@ -27,33 +23,41 @@ do
 			;;
 		*)
 			branch="$1"
+
+			if [ -n "${branch#release*}" ] || [ -n "${branch#issue*}"]; then
+				printf "ERROR: Cannot use branch names that begin with \'release\' or \'issue\'.\n"
+				printf "Use the \'gitflow release\' or \'gitflow patch\' command.\n"
+				exit 1
+			fi
 			# Is branch a branch that currently exists?
+			;;
+		-h | --help)
+			printf "Unknown option.\n"
+			printf "${USAGE}"
 			;;
 	esac
 	shift
 
 done
 
-if [ -z branch ]; then
-	echo "Must supply a <branch_name> to feature command."
+if [ -z "$branch" ]; then
+	printf "Must supply a <branch_name> to feature command."
 	exit 1
 else
 	git checkout -b "$branch" development
 fi
 
 if [[ $merge ]]; then
-	#statements
-	echo "Merge: $branch .. develop"
-	git pull origin develop &&
-	git checkout develop &&
-	git merge "$branch" &&
-	git push &&
-	git branch -d "$branch"
+	printf "Merge: $branch .. development"
+	git pull origin development &&
+	git checkout development &&
+	git merge --no-ff "$branch" &&
+	git push
 fi
 
 if [[ $delete ]]; then
-	#statements
-	echo "delete"
+	printf "Delete: $branch"
+	git branch -d "$branch"
 fi
 
 
