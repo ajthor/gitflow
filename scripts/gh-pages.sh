@@ -1,6 +1,6 @@
 #!/bin/sh
 
-USAGE="gitflow gh-pages [-c | --commit]\n\n"
+USAGE="usage: gitflow gh-pages [-c | --commit]\n\n"
 
 firstcommit=
 

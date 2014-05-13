@@ -1,6 +1,6 @@
 #!/bin/sh
 
-USAGE="gitflow feature <branch_name> [-d | --delete] [-m | --merge] [<destination_branch>]\n\n"
+USAGE="usage: gitflow feature <branch_name> [-d | --delete] [-m | --merge] [<destination_branch>]\n\n"
 
 delete=
 merge=

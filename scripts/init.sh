@@ -1,6 +1,6 @@
 #!/bin/sh
 
-USAGE="gitflow init [-c | --commit] [-g | --gh-pages] <remote_url>\n\n"
+USAGE="usage: gitflow init [-c | --commit] [-g | --gh-pages] <remote_url>\n\n"
 
 ghpages=
 remoteUrl=

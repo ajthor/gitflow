@@ -1,6 +1,6 @@
 #!/bin/sh
 
-USAGE="gitflow release <semver_tag> [-d | --delete] [-m | --merge]\n\n"
+USAGE="usage: gitflow release <semver_tag> [-d | --delete] [-m | --merge]\n\n"
 
 delete=
 merge=
