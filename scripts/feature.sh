@@ -22,9 +22,13 @@ do
 		-m | --merge)
 			merge=1
 			;;
+		dev | develop | development | master)
+			dest="$1"
+			;;
 		*)
 			branch="$1"
 			# Is branch a branch that currently exists?
+			;;
 	esac
 	shift
 
@@ -34,15 +38,22 @@ if [ -z branch ]; then
 	echo "Must supply a <branch_name> to feature command."
 	exit 1
 else
-	echo $branch
+	git checkout -b "$branch" development
 fi
 
 if [[ $merge ]]; then
 	#statements
-	echo "merge"
+	echo "Merge: $branch .. develop"
+	git pull origin develop &&
+	git checkout develop &&
+	git merge "$branch" &&
+	git push &&
+	git branch -d "$branch"
 fi
 
 if [[ $delete ]]; then
 	#statements
 	echo "delete"
 fi
+
+

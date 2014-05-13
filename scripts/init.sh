@@ -47,3 +47,10 @@ if [[ $ghpages ]]; then
 		sh ./gh-pages.sh
 	fi
 fi
+
+git branch development
+git checkout development
+
+git push -u origin development
+
+

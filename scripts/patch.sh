@@ -5,6 +5,8 @@ USAGE="usage: gitflow patch <issue_number> [-d] [-m]\n\n"
 delete=
 merge=
 
+branch=
+
 while test $# != 0
 do
 
@@ -19,10 +21,15 @@ do
 		-m | --merge)
 			merge=1
 			;;
+		*)
+			branch="$1"
+			;;
 	esac
 	shift
 
 done
+
+echo "issue: $branch"
 
 if [[ $merge ]]; then
 	#statements
