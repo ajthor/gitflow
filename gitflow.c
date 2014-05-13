@@ -4,11 +4,11 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "gitflow-branch.h"
-#include "gitflow-feature.h"
-#include "gitflow-gh-pages.h"
-#include "gitflow-init.h"
-#include "gitflow-status.h"
+#include "builtin/gitflow-branch.h"
+#include "builtin/gitflow-feature.h"
+#include "builtin/gitflow-gh-pages.h"
+#include "builtin/gitflow-init.h"
+#include "builtin/gitflow-status.h"
 
 #include "semver.h"
 #include "run_command.h"
@@ -56,6 +56,7 @@ static command commands[] = {
 	{ "gh-pages", "Initialize the gh-pages branch." },
 	{ "init",     "Initialize the GitFlow workspace." },
 	{ "patch",    "Add a new patch branch to the workflow." },
+	{ "release",  "Create a new release branch." },
 	{ "help",     "Display GitFlow help." }
 };
 
