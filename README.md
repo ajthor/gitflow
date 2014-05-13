@@ -1,6 +1,6 @@
 # GitFlow
 
-Opinionated Git workflow scripts! For some excellent information on Git workflows, see [Atlassian's Git Tutorials](https://www.atlassian.com/git/workflows#!workflow-overview).
+Opinionated Git workflow scripts! For some excellent information on Git workflows, see [Atlassian's Git Tutorials](https://www.atlassian.com/git/workflows#!workflow-overview) or Vincent Driessen's articles on Git at [nvie.com](http://nvie.com/).
 
 ## Installation
 

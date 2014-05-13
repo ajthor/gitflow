@@ -22,8 +22,8 @@
 // GitFlow command.
 
 static char * prepare_shell_command(const char * cmd) {
-	char * shell_cmd = malloc(sizeof(cmd) + 5);
-	sprintf(shell_cmd, "./%s.sh", cmd);
+	char * shell_cmd = malloc(sizeof(cmd) + 8 + 5);
+	sprintf(shell_cmd, "./scripts/%s.sh", cmd);
 
 	return shell_cmd;
 }
@@ -66,13 +66,9 @@ static int exec_command(const char * cmd, char * const argv[]) {
 	pid_t my_pid, parent_pid, child_pid;
 	int child_status;
 
-	int i, argc;
+	int argc;
 	for(argc = 0; argv[argc]; argc++) 
 		;
-
-	for(i = 0; i < argc; i++) {
-		printf("%s\n", argv[i]);
-	}
 
 	my_pid = getpid();
 	parent_pid = getppid();
@@ -110,7 +106,7 @@ int exec_shell_command(const char * cmd, const char ** argv) {
 
 	free(shell_cmd);
 	free(new_argv);
-	return 1;
+	return 0;
 }
 
 
