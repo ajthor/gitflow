@@ -22,8 +22,9 @@
 // GitFlow command.
 
 static char * prepare_shell_command(const char * cmd) {
-	char * shell_cmd = malloc(sizeof(cmd) + 8 + 5);
-	sprintf(shell_cmd, "./scripts/%s.sh", cmd);
+	// 27 - path, 3 - extension, 1- NULL
+	char * shell_cmd = malloc(sizeof(cmd) + 27 + 3 + 1);
+	sprintf(shell_cmd, "/usr/local/gitflow/scripts/%s.sh", cmd);
 
 	return shell_cmd;
 }
@@ -38,10 +39,6 @@ static const char ** prepare_command(const char * cmd, const char ** argv) {
 		;
 
 	new_argv = malloc(sizeof(new_argv) * (argc + 4));
-
-	if(argc < 1)
-		exit(1);
-
 
 #ifndef WINDOWS
 	new_argv[new_argc++] = SHELL_PATH;
