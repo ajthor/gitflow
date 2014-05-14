@@ -35,7 +35,7 @@ if git show-ref --verify -q refs/heads/gh-pages; then
 	branch_exists=1
 fi
 
-if [[ "$branch_exists" ]]; then
+if [ "$branch_exists" -eq 1 ]; then
 	printf "Error: gh-pages branch already exists.\n"
 else
 	# Create Gh-Pages Branch
