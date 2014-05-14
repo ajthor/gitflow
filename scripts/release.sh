@@ -2,11 +2,16 @@
 
 USAGE="usage: gitflow release <semver_tag> [-d | --delete] [-m | --merge]\n\n"
 
-delete=
-merge=
+delete=0
+merge=0
+
+remoteUrl=
+has_remote=0
 
 version=
 branch=
+
+branch_exists=0
 
 while test $# != 0
 do
@@ -37,7 +42,7 @@ do
 done
 
 if [ -z "$branch" ]; then
-	printf "Must supply a <semver_tag> to release command."
+	printf "Must supply a <semver_tag> to release command.\n"
 	exit 1
 else
 	git checkout -b "$branch" development
@@ -45,7 +50,7 @@ fi
 
 if [[ $merge ]]; then
 	#statements
-	printf "Merge: $branch .. master"
+	printf "Merge: master .. $branch\n"
 	git pull origin master &&
 	git checkout master &&
 	git merge --no-ff "$branch" &&
@@ -55,7 +60,7 @@ if [[ $merge ]]; then
 	git tag -a "$version" &&
 	git push --tags
 
-	printf "Merge: $branch .. development"
+	printf "Merge: development .. $branch\n"
 	git pull origin development &&
 	git checkout development &&
 	git merge --no-ff "$branch" &&
@@ -63,7 +68,7 @@ if [[ $merge ]]; then
 fi
 
 if [[ $delete ]]; then
-	printf "Delete: $branch"
+	printf "Delete: $branch\n"
 	git branch -d "$branch"
 fi
 
