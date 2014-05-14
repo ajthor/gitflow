@@ -2,7 +2,8 @@
 
 USAGE="usage: gitflow gh-pages [-c | --commit]\n\n"
 
-firstcommit=
+firstcommit=0
+branch_exists=0
 
 while test $# != 0
 do
@@ -25,18 +26,32 @@ do
 
 done
 
-git checkout master &&
-git checkout --orphan gh-pages &&
-git rm -rf .
+# Gh-Pages Branch
+# ===============
 
-if [[ $firstcommit ]]; then
-	echo "Docs coming soon." > index.html &&
-	git add index.html &&
-	git commit -a -m "initial gh-pages commit"
+# Check if Gh-Pages Branch Exists
+# -------------------------------
+if git show-ref --verify -q refs/heads/gh-pages; then
+	branch_exists=1
 fi
 
-git push origin gh-pages
+if [[ "$branch_exists" ]]; then
+	printf "Error: gh-pages branch already exists.\n"
+else
+	# Create Gh-Pages Branch
+	# ----------------------
+	git checkout master &&
+	git checkout --orphan gh-pages &&
+	git rm -rf .
 
-git checkout development
+	if [[ $firstcommit ]]; then
+		echo "Docs coming soon." > index.html &&
+		git add index.html &&
+		git commit -a -m "initial gh-pages commit"
+	fi
+
+	git push origin gh-pages
+
+fi
 
 

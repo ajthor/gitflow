@@ -1,7 +1,7 @@
 # Common Makefile Commands
 # ------------------------
 CC = gcc
-RM = rm -f
+RM = rm -rf
 INSTALL = install
 LN = ln
 
@@ -24,6 +24,8 @@ exec_prefix = $(prefix)
 bindir = $(exec_prefix)/bin
 libdir = $(exec_prefix)/gitflow
 
+tempdir = ./.tmp
+
 # Object Variables
 # ----------------
 # These varialbes contain references to objects and files used by the 
@@ -45,7 +47,7 @@ SOURCES += gitflow.c
 SOURCES += semver.c
 SOURCES += run_command.c
 
-OBJECTS = $(SOURCES:.c=.o)
+OBJECTS = $(addprefix $(tempdir)/,$(notdir $(SOURCES:.c=.o)))
 
 SCRIPT_DIR = ./scripts
 
@@ -67,7 +69,7 @@ all: install
 # Objects
 # -------
 # Compiles objects for linking.
-%.o: %.c $(LIB_H)
+$(tempdir)/%.o: %.c $(LIB_H)
 	$(CC) -c $< $(CFLAGS) -o $@
 
 # Install
@@ -79,12 +81,13 @@ all: install
 install: | directories compile copy_scripts clean
 	
 directories:
+	-[[ -d $(tempdir) ]] || mkdir $(tempdir)
 	-[[ -d $(libdir) ]] || mkdir $(libdir)
 	-[[ -d $(libdir)/scripts ]] || mkdir $(libdir)/scripts
 
 compile: $(OBJECTS)
-	$(CC) $^ $(CFLAGS) -o $(TARGET)
-	$(INSTALL) -m 0755 $(TARGET) $(libdir)/$(TARGET)
+	$(CC) $^ $(CFLAGS) -o $(tempdir)/$(TARGET)
+	$(INSTALL) -m 0755 $(tempdir)/$(TARGET) $(libdir)/$(TARGET)
 
 	-[ -f $(bindir)/$(TARGET) ] || $(LN) -s $(libdir)/$(TARGET) $(bindir)/$(TARGET)
 
@@ -101,11 +104,9 @@ uninstall: | clean_objects clean_target
 # Clean
 # -----
 # Removes objects created by Makefile during compile.
-.PHONY: clean clean_objects clean_target
-clean: | clean_objects clean_target
+.PHONY: clean clean_temp
+clean: | clean_temp
 
-clean_objects: $(OBJECTS)
+clean_temp: $(tempdir)
 	$(RM) $^
 
-clean_target: $(TARGET)
-	$(RM) $^
