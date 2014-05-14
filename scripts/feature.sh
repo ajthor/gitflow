@@ -66,12 +66,7 @@ fi
 
 if [ "$branch_exists" -eq 1 ]; then
 
-	has_remote=$(git ls-remote ${remoteUrl} &> /dev/null)
-	if [ -n "$has_remote" ]; then
-		has_remote=1
-	else
-		has_remote=0
-	fi
+	git stash
 
 	# Merge Branch
 	# ------------
@@ -83,6 +78,13 @@ if [ "$branch_exists" -eq 1 ]; then
 		else
 			printf "Destination branch must exist.\n"
 			exit 1
+		fi
+
+		has_remote=$(git ls-remote ${remoteUrl} &> /dev/null)
+		if [ -n "$has_remote" ]; then
+			has_remote=1
+		else
+			has_remote=0
 		fi
 
 		printf "Merge: $dest .. $branch\n"
@@ -113,6 +115,7 @@ if [ "$branch_exists" -eq 1 ]; then
 else
 	# Create Feature Branch
 	# ---------------------
+	printf "Create: feature branch $branch\n"
 	git checkout -b "$branch" development
 fi
 
