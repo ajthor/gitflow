@@ -1,32 +1,33 @@
 {
-	"name": "gitflow",
-	"version": "0.0.0",
-	"main": "lib/gitflow.js",
-	"description": "Opinionated Git workflow tool.",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/ajthor/gitflow.git"
-	},
-	"licenses": {
-		"type": "MIT"
-	},
-	"dependencies": {
-		"async": "^0.8.0",
-		"underscore": "^1.6.0"
-	},
-	"devDependencies": {
-		"github": "^0.1.16",
-		"grunt": "^0.4.4",
-		"grunt-shell": "^0.7.0",
-		"gulp": "^3.6.2",
-		"gulp-util": "^2.2.14",
-		"gulp-git": "^0.4.1",
-		"gulp-shell": "^0.2.4",
-		"gulp-cached": "0.0.3",
-		"gulp-remember": "^0.2.0",
-		"gulp-docco": "0.0.4"
-	},
-	"scripts": {
-		"test": "gulp test"
-	}
+  "name": "gitflow",
+  "version": "0.0.0",
+  "main": "lib/gitflow.js",
+  "description": "Opinionated Git workflow tool.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ajthor/gitflow.git"
+  },
+  "licenses": {
+    "type": "MIT"
+  },
+  "dependencies": {
+    "async": "^0.8.0",
+    "minimist": "^0.1.0",
+    "underscore": "^1.6.0"
+  },
+  "devDependencies": {
+    "github": "^0.1.16",
+    "grunt": "^0.4.4",
+    "grunt-shell": "^0.7.0",
+    "gulp": "^3.6.2",
+    "gulp-util": "^2.2.14",
+    "gulp-git": "^0.4.1",
+    "gulp-shell": "^0.2.4",
+    "gulp-cached": "0.0.3",
+    "gulp-remember": "^0.2.0",
+    "gulp-docco": "0.0.4"
+  },
+  "scripts": {
+    "test": "gulp test"
+  }
 }
