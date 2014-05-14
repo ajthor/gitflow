@@ -5,7 +5,7 @@ USAGE="usage: gitflow init [-c | --commit] [-g | --gh-pages] <remote_url>\n\n"
 ghpages=0
 remoteUrl=
 
-firstcommit=
+firstcommit=0
 
 has_dev_branch=0
 has_master_branch=0
@@ -61,7 +61,7 @@ if [ ! `git rev-parse -q --git-dir` ]; then
 		has_remote=$(git ls-remote ${remoteUrl} &> /dev/null)
 		git ls-remote ${remoteUrl} &> /dev/null
 		if [ -n "$has_remote" ]; then
-			$has_remote=1
+			has_remote=1
 		fi
 	fi
 
