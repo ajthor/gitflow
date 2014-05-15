@@ -35,6 +35,9 @@ static const char ** handle_options(const char * cmd, int argc, const char * arg
 	const char ** new_argv;
 	new_argv = malloc(sizeof(new_argv) * (argc + 4));
 
+	// Remove the first two commands from the array. They correspond 
+	// to the script name and the command. We have already extracted 
+	// that, so no need to include it here.
 	for(i = 2; i < argc; i++) {
 		new_argv[i - 2] = argv[i];
 	}
@@ -45,7 +48,7 @@ static const char ** handle_options(const char * cmd, int argc, const char * arg
 // Command Structure
 // -----------------
 typedef struct {
-	const char cmd[10];
+	const char cmd[16];
 	const char desc[256];
 }command;
 
@@ -60,6 +63,30 @@ static command commands[] = {
 	{ "help",     "Display GitFlow help." }
 };
 
+// Alias Structure
+// ---------------
+typedef struct {
+	const char cmd[16];
+	const char alias[16];
+}alias;
+
+// Alias Array
+// -----------
+static alias aliases[] = {
+	{ "feature",  "f" },
+	{ "gh-pages", "gp" },
+	{ "gh-pages", "ghp" },
+	{ "gh-pages", "pages" },
+	{ "gh-pages", "docs" },
+	{ "gh-pages", "documentation" },
+	{ "init",     "i" },
+	{ "init",     "initialize" },
+	{ "patch",    "p" },
+	{ "patch",    "hotfix" },
+	{ "release",  "r" },
+	{ "help",     "h" }
+};
+
 // Extract_Commands Function
 // -------------------------
 // Searches through the list of arguments, starting at the beginning, 
@@ -69,8 +96,10 @@ static command commands[] = {
 static const char * extract_command(int argc, const char * argv[]) {
 	int i = 0;
 	int j = 0;
+	int k = 0;
 	int len = argc;
 
+	alias * a;
 	command * s;
 
 	while(i < len) {
@@ -83,18 +112,39 @@ static const char * extract_command(int argc, const char * argv[]) {
 			}
 		}
 		else {
+			// Search in the commands array to see if the command 
+			// matches one of the pre-defined commands.
 			for(j = ARRAY_SIZE(commands) - 1; j >= 0; j--) {
 				s = &commands[j];
 
 				if( !strcmp(argv[i], s->cmd) ) {
-					return argv[i];
+					return s->cmd;
 				}
 			}
 
 			// No command found. Check aliases.
-			// for(j = ARRAY_SIZE(aliases); j >= 0; j--) {
+			for(j = ARRAY_SIZE(aliases) - 1; j >= 0; j--) {
+				a = &aliases[j];
 
-			// }
+				if( !strcmp(argv[i], a->alias) ) {
+					return a->cmd;
+				} 
+			}
+
+			// If the command doesn't exist in either the alias 
+			// array or the commands array, compare the command 
+			// letter by letter to see if it is the beginning of a 
+			// command that exists. Matches down to three letters.
+			for(j = ARRAY_SIZE(commands) - 1; j >= 0; j--) {
+				s = &commands[j];
+
+				for(k = strlen(argv[i]); k >= 2; k--) {
+
+					if( !strncmp(argv[i], s->cmd, k) ) {
+						return s->cmd;
+					}
+				}
+			}
 
 		}
 
