@@ -1,6 +1,10 @@
-# GitFlow
+# GitFlow 
+
+[![Build Status](https://travis-ci.org/ajthor/gitflow.svg?branch=master)](https://travis-ci.org/ajthor/gitflow)
 
 Opinionated Git workflow scripts! For some excellent information on Git workflows, see [Atlassian's Git Tutorials](https://www.atlassian.com/git/workflows#!workflow-overview) or Vincent Driessen's articles on Git at [nvie.com](http://nvie.com/).
+
+**This project is still a pre-release -- not all features are working properly yet and I cannot guarantee that the commands will work without issue.**
 
 The program is designed to be used in conjunction with Git, not instead of it. The commands are accessible using the `gitflow <command>` syntax. It doesn't take over the project (this is the least opinionated part of GitFlow) and you should be able to use the program whether you already have an active Git repo or are just creating one. Just use `git init` to make sure your project is set up for GitFlow.
 
@@ -32,11 +36,10 @@ As well as one more command specific to GitHub:
 
 - gh-pages
 
+
 ### Init
 
 The `init` command sets up your project to use GitFlow. It creates a 'development' branch (also known as an integration branch) in your project if it doesn't already exist and sets some more options for the development workflow specified in the following commands.
-
-#### Usage
 
     gitflow init [-c | --commit] [-g | --gh-pages] <remote_url>
 
@@ -44,11 +47,10 @@ The `init` command sets up your project to use GitFlow. It creates a 'developmen
 - -g: set up gh-pages
 - remote_url: the URL to your project (on GitHub/wherever)
 
+
 ### Feature
 
 Every update to your project comes from 'feature' branches. Use the `feature` command to create a new branch off of 'development'. This is where all of your development will go.
-
-#### Usage
 
     gitflow feature <branch_name> [-d | --delete] [-m | --merge] [<destination_branch>]
 
@@ -57,11 +59,10 @@ Every update to your project comes from 'feature' branches. Use the `feature` co
 - -m: merge the branch into 'development'
 - destination_branch: optionally specify a destination branch to merge into
 
+
 ### Release
 
 Once you have accumulated features and are ready to release a new version, use the `release` command to create a new release branch off of 'development', make any last minute changes, and then merge the release branch into 'master' _and_ 'development'. 
-
-#### Usage
 
     gitflow release <semver_tag> [-d | --delete] [-m | --merge]
 
@@ -69,11 +70,10 @@ Once you have accumulated features and are ready to release a new version, use t
 - -d: delete the branch
 - -m: merge branch into 'master' and 'development'
 
+
 ### Patch
 
 If, after a release branch has been published, a bug is spotted, the `patch` command is useful for creating a branch that is used for fixing the issue. It creates a new 'issue' branch off of 'master' that will merge into the 'master' _and_ 'development' branches.
-
-#### Usage
 
     gitflow patch <issue_number> [-d | --delete] [-m | --merge]
 
@@ -81,20 +81,22 @@ If, after a release branch has been published, a bug is spotted, the `patch` com
 - -d: delete the branch
 - -m: merge branch into 'master' and 'development'
 
+
 ### Gh-Pages
 
 The `gh-pages` command is specific to the documentation branch on GitHub. It creates an empty orphan branch that holds all of your documentation and an index.html file which is viewable at: `yourusername.github.com/yourproject`
-
-#### Usage
 
 	gitflow gh-pages [-c | --commit]
 
 - -c: make a first commit (even if it's empty)
 
 
+
 ## Contributing
 
-The project is under active development. Please contribute! I am not, in any sense, a good C or BASH developer. It would be useful to get some feedback and review on those parts of the program.
+The project is under active development. Please contribute! I am not, in any sense, a good C or BASH developer. It would be useful to get some feedback and review on those parts of the program. 
+
+It would also be useful to get a Git pro to help out with integrating the C part of the program with the Git API commands instead of relying on the shell scripts.
 
 
 ## Un-Installation
