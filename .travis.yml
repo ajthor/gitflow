@@ -2,7 +2,10 @@ language: c
 compiler:
   - clang
   - gcc
-script: make install
+script: sudo make install
+branches:
+  except:
+    - experimental
 notifications:
   email: 
     on_success: change
