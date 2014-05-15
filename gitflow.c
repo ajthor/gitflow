@@ -74,6 +74,7 @@ typedef struct {
 // -----------
 static alias aliases[] = {
 	{ "feature",  "f" },
+	{ "feature",  "topic" },
 	{ "gh-pages", "gp" },
 	{ "gh-pages", "ghp" },
 	{ "gh-pages", "pages" },
@@ -82,6 +83,7 @@ static alias aliases[] = {
 	{ "init",     "i" },
 	{ "init",     "initialize" },
 	{ "patch",    "p" },
+	{ "patch",    "issue" },
 	{ "patch",    "hotfix" },
 	{ "release",  "r" },
 	{ "help",     "h" }
