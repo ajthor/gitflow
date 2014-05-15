@@ -3,3 +3,7 @@ compiler:
   - clang
   - gcc
 script: make install
+notifications:
+  email: 
+    on_success: change
+    on_failure: change
