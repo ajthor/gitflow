@@ -38,6 +38,14 @@ fi
 if [ "$branch_exists" -eq 1 ]; then
 	printf "Error: gh-pages branch already exists.\n"
 else
+
+	has_remote=$(git ls-remote ${remoteUrl} &> /dev/null)
+	if [ -n "$has_remote" ]; then
+		has_remote=1
+	else
+		has_remote=0
+	fi
+	
 	# Create Gh-Pages Branch
 	# ----------------------
 	git checkout master &&
@@ -50,8 +58,9 @@ else
 		git commit -a -m "initial gh-pages commit"
 	fi
 
-	git push origin gh-pages
-
+	if [ "$has_remote" -eq 1 ]; then
+		git push
+	fi
 fi
 
 
