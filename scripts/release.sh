@@ -81,10 +81,11 @@ if [ "$branch_exists" -eq 1 ]; then
 
 		printf "Merge: master .. $branch\n"
 
-		# if [ "$has_remote" -eq 1 ]; then
-		# 	git pull origin master
-		# 	git pull origin development
-		# fi
+		if [ "$has_remote" -eq 1 ]; then
+			git pull origin master
+			git pull origin development
+			git pull origin "$branch"
+		fi
 
 		git checkout master &&
 		git merge --no-ff "$branch" 
@@ -92,19 +93,19 @@ if [ "$branch_exists" -eq 1 ]; then
 		printf "Tag: $version"
 		git tag -a "$version"
 		
-		# if [ "$has_remote" -eq 1 ]; then
-		# 	git push
-		# 	git push --tags
-		# fi
+		if [ "$has_remote" -eq 1 ]; then
+			git push
+			git push --tags
+		fi
 
 		printf "Merge: development .. $branch\n"
 		
 		git checkout development &&
 		git merge --no-ff "$branch"
 
-		# if [ "$has_remote" -eq 1 ]; then
-		# 	git push
-		# fi
+		if [ "$has_remote" -eq 1 ]; then
+			git push
+		fi
 	fi
 
 	# Delete Branch

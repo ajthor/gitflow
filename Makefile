@@ -82,16 +82,16 @@ $(tempdir)/%.o: %.c $(LIB_H)
 install: | directories compile copy_scripts clean
 	
 directories:
-	-[[ -d $(tempdir) ]] || mkdir $(tempdir)
-	-[[ -d $(libdir) ]] || mkdir $(libdir)
-	-[[ -d $(libdir)/scripts ]] || mkdir $(libdir)/scripts
+	-[ -d $(tempdir) ] || mkdir $(tempdir)
+	-[ -d $(libdir) ] || mkdir $(libdir)
+	-[ -d $(libdir)/scripts ] || mkdir $(libdir)/scripts
 
 compile: $(OBJECTS)
 	$(CC) $^ $(CFLAGS) -o $(tempdir)/$(TARGET)
 	$(INSTALL) -m 0755 $(tempdir)/$(TARGET) $(libdir)/$(TARGET)
 
-	-[ -f $(bindir)/$(TARGET) ] || $(LN) -s $(libdir)/$(TARGET) $(bindir)/$(TARGET)
-	-[ -f $(bindir)/$(ALIAS) ] || $(LN) -s $(libdir)/$(TARGET) $(bindir)/$(ALIAS)
+	-[ -e $(bindir)/$(TARGET) ] || $(LN) -s $(libdir)/$(TARGET) $(bindir)/$(TARGET)
+	-[ -e $(bindir)/$(ALIAS) ] || $(LN) -s $(libdir)/$(TARGET) $(bindir)/$(ALIAS)
 
 copy_scripts: $(SCRIPT_SH)
 	$(INSTALL) -m 0644 $^ $(libdir)/scripts
