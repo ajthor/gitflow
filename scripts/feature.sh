@@ -89,17 +89,17 @@ if [ "$branch_exists" -eq 1 ]; then
 
 		printf "Merge: $dest .. $branch\n"
 		
-		# if [ "$has_remote" -eq 1 ]; then
-		# 	git pull origin "$dest"
-		# 	git pull origin "$branch"
-		# fi
+		if [ "$has_remote" -eq 1 ]; then
+			git pull origin "$dest"
+			git pull origin "$branch"
+		fi
 		
 		git checkout "$dest" &&
 		git merge --no-ff "$branch"
 
-		# if [ "$has_remote" -eq 1 ]; then
-		# 	git push
-		# fi
+		if [ "$has_remote" -eq 1 ]; then
+			git push
+		fi
 	fi
 
 	# Delete Branch
