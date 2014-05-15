@@ -84,6 +84,7 @@ if [ "$branch_exists" -eq 1 ]; then
 		# if [ "$has_remote" -eq 1 ]; then
 		# 	git pull origin master
 		# 	git pull origin development
+		# 	git pull origin "$branch"
 		# fi
 
 		git checkout master &&

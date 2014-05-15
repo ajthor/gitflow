@@ -1,6 +1,6 @@
 #!/bin/sh
 
-USAGE="usage: gitflow init [-c | --commit] [-g | --gh-pages] <remote_url>\n\n"
+USAGE="usage: gitflow init [-c | --commit] [-g | --gh-pages] [<remote_url>]\n\n"
 
 ghpages=0
 remoteUrl=
@@ -24,7 +24,7 @@ do
 		-c | --commit)
 			firstcommit=1
 			;;
-		https://*.git | git@*.git | ssh://*.git)
+		https://*.git | git@*.git | ssh://*.git | *.git)
 			remoteUrl="$1"
 			;;
 		-h | --help)
@@ -121,8 +121,10 @@ else
 	# Create master Branch
 	# --------------------
 	# Create master if it doesn't exist.
-	has_master_branch=$(git symbolic-ref -q master)
-	if [[ ! "$has_master_branch" ]]; then
+	if git show-ref --verify -q refs/heads/master; then
+		has_master_branch=1
+	fi
+	if [ "$has_master_branch" -eq 1 ]; then
 		git checkout -b master
 		git update-ref HEAD master
 
@@ -137,8 +139,10 @@ else
 	# -------------------------
 	# Create development branch if it doesn't exist. If it does, 
 	# check out the development branch.
-	has_dev_branch=$(git symbolic-ref -q development)
-	if [[ ! "$has_dev_branch" ]]; then
+	if git show-ref --verify -q refs/heads/development; then
+		has_dev_branch=1
+	fi
+	if [ "$has_dev_branch" -eq 0 ]; then
 		git checkout -b development master
 
 		if [ "$has_remote" -eq 1 ]; then
