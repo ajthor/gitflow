@@ -10,6 +10,8 @@
 
 #define SHELL_PATH "/bin/sh"
 
+#define LIB_PATH "/usr/local/gitflow"
+
 #if defined(_WIN32) || defined(WIN32) && !defined(__CYGWIN__)
 #include <windows.h>
 #define WINDOWS
@@ -24,7 +26,7 @@
 static char * prepare_shell_command(const char * cmd) {
 	// 27 - path, 3 - extension, 1- NULL
 	char * shell_cmd = malloc(sizeof(cmd) + 27 + 3 + 1);
-	sprintf(shell_cmd, "/usr/local/gitflow/scripts/%s.sh", cmd);
+	sprintf(shell_cmd, "%s/scripts/%s.sh", LIB_PATH, cmd);
 
 	return shell_cmd;
 }
