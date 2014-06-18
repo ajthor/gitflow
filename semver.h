@@ -3,16 +3,14 @@ typedef struct {
 	unsigned minor;
 	unsigned patch;
 
-	char * note;
+	char note[32];
 
-	char * meta;
+	char meta[126];
 
 	char tag[64];
 
 } semver;
 
-void generate_semver(char *, semver *);
-
-void init_semver(semver *);
+semver * create_semver();
 
 void bump_semver(semver *, int);
