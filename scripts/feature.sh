@@ -108,6 +108,7 @@ if [ "$branch_exists" -eq 1 ]; then
 	# check out the branch.
 	if [ "$delete" -eq 1 ]; then
 		printf "Delete: $branch\n"
+		git checkout development
 		git branch -d "$branch"
 	else
 		git checkout "$branch"
@@ -117,7 +118,7 @@ else
 	# Create Feature Branch
 	# ---------------------
 	printf "Create: feature branch $branch\n"
-	git checkout -b "$branch" development
+	git checkout -b "$branch" origin/development
 fi
 
 
