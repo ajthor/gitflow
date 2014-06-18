@@ -118,7 +118,7 @@ else
 	# Create Feature Branch
 	# ---------------------
 	printf "Create: feature branch $branch\n"
-	git checkout -b "$branch" development
+	git checkout -b "$branch" origin/development
 fi
 
 

@@ -10,6 +10,8 @@ firstcommit=0
 has_dev_branch=0
 has_master_branch=0
 
+has_git_directory=0
+
 has_remote=0
 
 branch=
@@ -45,7 +47,8 @@ done
 # ===================
 # Check if .git directory exists--and if it does not, initialize a 
 # new, local Git repo with all of the requisite branches.
-if [ ! `git rev-parse -q --git-dir` ]; then
+has_git_directory=$(git rev-parse -q --git-dir 2> /dev/null)
+if [ ! `git rev-parse -q --git-dir 2> /dev/null` ]; then
 
 	# Initialize Git Repo
 	# -------------------
@@ -83,7 +86,7 @@ if [ ! `git rev-parse -q --git-dir` ]; then
 	# Create the development branch (we know it doesn't exist yet) 
 	# and make an empty commit to it.
 	git checkout master &&
-	git checkout -b development master &&
+	git checkout -b development origin/master &&
 	git commit --allow-empty --quiet -m "initial development commit"
 
 	# Push Development to Remote
@@ -143,7 +146,7 @@ else
 		has_dev_branch=1
 	fi
 	if [ "$has_dev_branch" -eq 0 ]; then
-		git checkout -b development master
+		git checkout -b development origin/master
 
 		if [ "$has_remote" -eq 1 ]; then
 			git push -u origin development
