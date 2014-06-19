@@ -68,6 +68,13 @@ if git show-ref --verify -q refs/heads/"$branch"; then
 		git pull origin "$dest"
 		git pull origin "$branch"
 	fi
+
+	# If the branch is an issue branch or a release branch, then 
+	# merge the branch into `master` as well as `dest`.
+	if [[ "$branch" = issue-* || "$branch" = release-* ]]; then
+		git checkout master &&
+		git merge --no-ff "$branch"
+	fi
 	
 	git checkout "$dest" &&
 	git merge --no-ff "$branch"
