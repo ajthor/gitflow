@@ -1,6 +1,6 @@
 #!/bin/sh
 
-USAGE="usage: gitflow feature <branch_name> [-d | --delete] [-m | --merge] [<destination_branch>]\n\n"
+USAGE="usage: gitflow feature <branch_name> [-d | --delete] [-m | --merge]\n\n"
 
 delete=0
 merge=0
@@ -8,11 +8,7 @@ merge=0
 remoteUrl=
 has_remote=0
 
-branch_exists=0
-dest_exists=0
-
 branch=
-dest="development"
 
 while test $# != 0
 do
@@ -23,9 +19,6 @@ do
 			;;
 		-m | --merge)
 			merge=1
-			;;
-		dev | develop | development | master)
-			dest="${1:-development}"
 			;;
 		-h | --help)
 			printf "${USAGE}"
@@ -58,65 +51,24 @@ fi
 # Feature Branch
 # ==============
 
-# Check if Feature Branch Exists
-# ------------------------------
+# Check if feature branch exists. If it does, then either merge it,
+# delete it, or check it out.
 if git show-ref --verify -q refs/heads/"$branch"; then
-	branch_exists=1
-fi
 
-if [ "$branch_exists" -eq 1 ]; then
-
-	git stash
-
-	# Merge Branch
-	# ------------
-	# Make sure destination exists and then merge the feature branch 
-	# into it.
 	if [ "$merge" -eq 1 ]; then
-		if git show-ref --verify -q refs/heads/"$dest"; then
-			dest_exists=1
-		else
-			printf "Destination branch must exist.\n"
-			exit 1
-		fi
-
-		has_remote=$(git ls-remote ${remoteUrl} &> /dev/null)
-		if [ -n "$has_remote" ]; then
-			has_remote=1
-		else
-			has_remote=0
-		fi
-
-		printf "Merge: $dest .. $branch\n"
-		
-		if [ "$has_remote" -eq 1 ]; then
-			git pull origin "$dest"
-			git pull origin "$branch"
-		fi
-		
-		git checkout "$dest" &&
-		git merge --no-ff "$branch"
-
-		if [ "$has_remote" -eq 1 ]; then
-			git push
-		fi
+		gitflow merge "$branch" development
 	fi
 
-	# Delete Branch
-	# -------------
-	# If the delete flag is passed, delete the branch. Otherwise, 
-	# check out the branch.
+	
+
 	if [ "$delete" -eq 1 ]; then
-		printf "Delete: $branch\n"
-		git checkout development
-		git branch -d "$branch"
+		gitflow delete "$branch"
 	else
 		git checkout "$branch"
 	fi
 
 else
-	# Create Feature Branch
-	# ---------------------
+	# If the branch doesn't exist, create a feature branch.
 	printf "Create: feature branch $branch\n"
 	git checkout -b "$branch" origin/development
 fi

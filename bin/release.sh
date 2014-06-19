@@ -11,9 +11,6 @@ has_remote=0
 version=
 branch=
 
-branch_exists=0
-tag_exists=0
-
 while test $# != 0
 do
 
@@ -24,13 +21,13 @@ do
 		-m | --merge)
 			merge=1
 			;;
-		v*.*.*)
-			version="$1"
-			branch="release-$1"
-			;;
 		-h | --help)
 			printf "${USAGE}"
 			exit 0
+			;;
+		v*.*.*)
+			version="$1"
+			branch="release-$1"
 			;;
 		*)
 			printf "Unknown option.\n"
@@ -51,80 +48,45 @@ fi
 # Release Branch
 # ==============
 
-# Check if Release Branch Exists
-# ------------------------------
+# Check if release branch exists. If it does, then either merge it,
+# delete it, or check it out.
 if git show-ref --verify -q refs/heads/"$branch"; then
-	branch_exists=1
-fi
-# Check if Tag Exists
-# -------------------
-if git show-ref --verify -q refs/tags/"$version"; then
-	tag_exists=1
-fi
 
-if [ "$branch_exists" -eq 1 ]; then
-
-	git stash
-
-	# Merge Branch
-	# ------------
-	# Merge release branch into master and development, tagging the 
-	# release as you go.
 	if [ "$merge" -eq 1 ]; then
 
-		has_remote=$(git ls-remote ${remoteUrl} &> /dev/null)
-		if [ -n "$has_remote" ]; then
+		# Check if the remote repository exists.
+		remoteUrl=$(git ls-remote --get-url)
+		if git ls-remote --exit-code "$remoteUrl" HEAD &> /dev/null; then
 			has_remote=1
-		else
-			has_remote=0
 		fi
 
-		printf "Merge: master .. $branch\n"
-
-		if [ "$has_remote" -eq 1 ]; then
-			git pull origin master
-			git pull origin development
-			git pull origin "$branch"
-		fi
-
-		git checkout master &&
-		git merge --no-ff "$branch" 
+		gitflow merge "$branch" master
 
 		printf "Tag: $version"
 		git tag -a "$version"
 		
 		if [ "$has_remote" -eq 1 ]; then
-			git push
 			git push --tags
 		fi
 
-		printf "Merge: development .. $branch\n"
-		
-		git checkout development &&
-		git merge --no-ff "$branch"
+		gitflow merge "$branch" development
 
-		if [ "$has_remote" -eq 1 ]; then
-			git push
-		fi
 	fi
 
-	# Delete Branch
-	# -------------
-	# If the delete flag is passed, delete the branch. Otherwise, 
-	# check out the branch.
-	if [[ $delete ]]; then
-		printf "Delete: $branch\n"
-		git branch -d "$branch"
+	
+
+	if [ "$delete" -eq 1 ]; then
+		gitflow delete "$branch"
 	else
 		git checkout "$branch"
 	fi
 
 else
-	# Create release Branch
-	# ---------------------
-	# If tag does not exist, create release branch.
-	if [ "$tag_exists" -eq 1 ]; then
-		printf "Error: tag already exists. Please choose another tag.\n"
+	# If the tag already exists, then throw an error.
+	if git show-ref --verify -q refs/tags/"$version"; then
+		printf "Error: Tag already exists. Please choose another tag.\n"
+		exit 1
+	# If the branch doesn't exist, create a release branch.
 	else
 		printf "Create: release branch $branch\n"
 		git checkout -b "$branch" development

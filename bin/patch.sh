@@ -8,8 +8,6 @@ merge=0
 remoteUrl=
 has_remote=0
 
-branch_exists=0
-
 branch=
 
 while test $# != 0
@@ -39,75 +37,39 @@ do
 
 done
 
+# Exit if no branch name specified.
+if [ -z "$branch" ]; then
+	printf "Must supply an <issue_number> to issue command.\n"
+	exit 1
+fi
+
 # Patch Branch
 # ============
 
-# Check if Branch Exists
-# ----------------------
+# Check if issue branch exists. If it does, then either merge it,
+# delete it, or check it out.
 if git show-ref --verify -q refs/heads/"$branch"; then
-	branch_exists=1
-fi
 
-if [ "$branch_exists" -eq 1 ]; then
-
-	git stash
-
-	# Merge Branch
-	# ------------
-	# Make sure destination exists and then merge the patch branch 
-	# into it.
 	if [ "$merge" -eq 1 ]; then
 
-		has_remote=$(git ls-remote ${remoteUrl} &> /dev/null)
-		if [ -n "$has_remote" ]; then
-			has_remote=1
-		else
-			has_remote=0
-		fi
-
-		printf "Merge: master .. $branch\n"
-
-		if [ "$has_remote" -eq 1 ]; then
-			git pull origin master
-			git pull origin development
-			git pull origin "$branch"
-		fi
-
-		git checkout master &&
-		git merge --no-ff "$branch"
-
-		if [ "$has_remote" -eq 1 ]; then
-			git push
-		fi
-
+		gitflow merge "$branch" master
 		# Create tag for patch.
 
-		printf "Merge: development .. $branch\n"
-
-		git checkout development &&
-		git merge --no-ff "$branch"
-
-		if [ "$has_remote" -eq 1 ]; then
-			git push
-		fi
+		gitflow merge "$branch" development
 
 	fi
 
-	# Delete Branch
-	# -------------
-	# If the delete flag is passed, delete the branch. Otherwise, 
-	# check out the branch.
+	
+
 	if [ "$delete" -eq 1 ]; then
-		printf "Delete: $branch\n"
-		git branch -d "$branch"
+		gitflow delete "$branch"
 	else
 		git checkout "$branch"
 	fi
 
 else
-	# Create Patch Branch
-	# -------------------
+	# If the branch doesn't exist, create an issue branch.
 	printf "Create: issue branch $branch\n"
-	git checkout -b "$branch" development
+	git checkout -b "$branch" origin/development
 fi
 
