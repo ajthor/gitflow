@@ -36,23 +36,27 @@ SOURCES=
 SCRIPT_SH=
 NO_INSTALL=
 
-LIB_H += run_command.h
-LIB_H += semver.h
+SRC_DIR = ./src
+
+LIB_H += $(SRC_DIR)/run_command.h
+# LIB_H += $(SRC_DIR)/semver.h
 # LIB_H += gitflow-branch.h
 # LIB_H += gitflow-feature.h
 # LIB_H += gitflow-gh-pages.h
 # LIB_H += gitflow-init.h
 # LIB_H += gitflow-status.h
 
-SOURCES += gitflow.c
-SOURCES += semver.c
-SOURCES += run_command.c
+SOURCES += $(SRC_DIR)/gitflow.c
+# SOURCES += $(SRC_DIR)/semver.c
+SOURCES += $(SRC_DIR)/run_command.c
 
 OBJECTS = $(addprefix $(tempdir)/,$(notdir $(SOURCES:.c=.o)))
 
-SCRIPT_DIR = ./scripts
+SCRIPT_DIR = ./bin
 
 SCRIPT_SH += $(SCRIPT_DIR)/feature.sh
+SCRIPT_SH += $(SCRIPT_DIR)/merge.sh
+SCRIPT_SH += $(SCRIPT_DIR)/delete.sh
 SCRIPT_SH += $(SCRIPT_DIR)/gh-pages.sh
 SCRIPT_SH += $(SCRIPT_DIR)/init.sh
 SCRIPT_SH += $(SCRIPT_DIR)/patch.sh
@@ -60,7 +64,7 @@ SCRIPT_SH += $(SCRIPT_DIR)/release.sh
 
 SCRIPT_SH_GEN = $(patsubst %.sh,%,$(SCRIPT_SH))
 
-NO_INSTALL += semver.c
+NO_INSTALL += ./bin/semver.c
 
 SCRIPT_SH_INS = $(filter-out $(NO_INSTALL),$(SCRIPT_SH_GEN))
 
@@ -70,7 +74,7 @@ all: install
 # Objects
 # -------
 # Compiles objects for linking.
-$(tempdir)/%.o: %.c $(LIB_H)
+$(tempdir)/%.o: $(SRC_DIR)/%.c $(LIB_H)
 	$(CC) -c $< $(CFLAGS) -o $@
 
 # Install

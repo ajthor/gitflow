@@ -10,35 +10,35 @@
 // semantic version string which it will output in the `tag` 
 // variable.
 
-// Generate_Semver Function
-// ------------------------
-// Probably the most useful function in the file, it accepts a string 
-// and a semver struct and generates a semver tag from the struct and 
-// copies the value to the string.
-void generate_semver(char * tag, semver * s) {
-	sprintf( tag, "v%d.%d.%d",
+// generate_semver_string Function
+// -------------------------------
+// Probably the most useful function in the file, it accepts a semver 
+// struct and generates a semver tag from the struct and copies the 
+// value to the string.
+static void generate_semver_string(semver * s) {
+	sprintf( s->tag, "v%d.%d.%d",
 		s->major, s->minor, s->patch);	
 
 // Don't include the note or meta information if it doesn't exist. 
 // - Notes are added before meta with a hyphen '-'. 
 // - Meta or build information is added last with a plus sign '+'.
 	if(strlen(s->note) > 1) {
-		strcat(tag, "-");
-		strcat(tag, s->note);
+		strcat(s->tag, "-");
+		strcat(s->tag, s->note);
 	}
 	if(strlen(s->meta) > 1) {
-		strcat(tag, "+");
-		strcat(tag, s->meta);
+		strcat(s->tag, "+");
+		strcat(s->tag, s->meta);
 	}
 }
 
-// Init_Semver Function
-// --------------------
-// Initializes a semver struct to its default values. <<__Developer's 
-// Note:__ I tried to avoid using `malloc` as much as possible here, 
-// because I don't want people to have to de-allocate the 
-// semver struct.>> All values default to 0.
-void init_semver(semver * s) {
+// create_semver Function
+// ----------------------
+// Returns a new semver struct with default values. 
+// *All values default to 0.*
+semver * create_semver() {
+	semver * s = malloc(sizeof(semver));
+
 	s->major = 0;
 	s->minor = 0;
 	s->patch = 0;
@@ -46,10 +46,14 @@ void init_semver(semver * s) {
 	s->note = "\0";
 	s->meta = "\0";
 
-	generate_semver(s->tag, s);
+	generate_semver_string(s);
 }
 
-// Bump_Semver Function
+void destroy_semver(semver * s) {
+	free(s);
+}
+
+// bump_semver Function
 // --------------------
 // Function 'bumps' the semver by incrementing the major, minor, or 
 // patch number by one. Follows semantic versioning rules. See 
@@ -79,7 +83,7 @@ void bump_semver(semver * s, int type) {
 			break;
 	}
 
-	generate_semver(s->tag, s);
+	generate_semver_string(s);
 }
 
 
