@@ -56,7 +56,7 @@ fi
 if git show-ref --verify -q refs/heads/"$branch"; then
 
 	if [ "$merge" -eq 1 ]; then
-		gitflow merge "$branch" development
+		gitflow merge "$branch"
 	fi
 
 	

@@ -60,7 +60,7 @@ if git show-ref --verify -q refs/heads/"$branch"; then
 			has_remote=1
 		fi
 
-		gitflow merge "$branch" master
+		gitflow merge "$branch"
 
 		printf "Tag: $version"
 		git tag -a "$version"
@@ -68,8 +68,6 @@ if git show-ref --verify -q refs/heads/"$branch"; then
 		if [ "$has_remote" -eq 1 ]; then
 			git push --tags
 		fi
-
-		gitflow merge "$branch" development
 
 	fi
 
