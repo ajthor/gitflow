@@ -2,7 +2,10 @@
 
 USAGE="usage: gitflow gh-pages [-c | --commit]\n\n"
 
-firstcommit=0
+remoteUrl=
+has_remote=0
+
+first_commit=0
 branch_exists=0
 
 while test $# != 0
@@ -10,7 +13,7 @@ do
 
 	case "$1" in
 		-c | --commit)
-			firstcommit=1
+			first_commit=1
 			;;
 		-h | --help)
 			printf "${USAGE}"
@@ -29,30 +32,23 @@ done
 # Gh-Pages Branch
 # ===============
 
-# Check if Gh-Pages Branch Exists
-# -------------------------------
+# Check if Gh-Pages branch exists.
 if git show-ref --verify -q refs/heads/gh-pages; then
-	branch_exists=1
-fi
-
-if [ "$branch_exists" -eq 1 ]; then
 	printf "Error: gh-pages branch already exists.\n"
 else
 
-	has_remote=$(git ls-remote ${remoteUrl} &> /dev/null)
-	if [ -n "$has_remote" ]; then
+	# Check if the remote repository exists.
+	remoteUrl=$(git ls-remote --get-url)
+	if git ls-remote --exit-code "$remoteUrl" HEAD &> /dev/null; then
 		has_remote=1
-	else
-		has_remote=0
 	fi
 	
-	# Create Gh-Pages Branch
-	# ----------------------
+	# Create Gh-Pages branch.
 	git checkout master &&
 	git checkout --orphan gh-pages &&
 	git rm -rf .
 
-	if [[ $firstcommit ]]; then
+	if [ "$first_commit" -eq 1 ]; then
 		echo "Docs coming soon." > index.html &&
 		git add index.html &&
 		git commit -a -m "initial gh-pages commit"
