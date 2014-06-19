@@ -76,6 +76,8 @@ if git show-ref --verify -q refs/heads/"$branch"; then
 		git push
 	fi
 
+	git checkout "$branch"
+
 else
 	printf "Branch does not exist.\n"
 	printf "${USAGE}"
