@@ -56,6 +56,8 @@ typedef struct {
 // --------------
 static command commands[] = {
 	{ "feature",  "Add a new feature branch to the workflow." },
+	{ "merge",    "Merge branches into development or master." },
+	{ "delete",   "Remove created branches." },
 	{ "gh-pages", "Initialize the gh-pages branch." },
 	{ "init",     "Initialize the GitFlow workspace." },
 	{ "patch",    "Add a new patch branch to the workflow." },
@@ -75,6 +77,10 @@ typedef struct {
 static alias aliases[] = {
 	{ "feature",  "f" },
 	{ "feature",  "topic" },
+	{ "merge",    "m" },
+	{ "merge",    "mg" },
+	{ "delete",   "d" },
+	{ "delete",   "rm" },
 	{ "gh-pages", "gp" },
 	{ "gh-pages", "ghp" },
 	{ "gh-pages", "pages" },

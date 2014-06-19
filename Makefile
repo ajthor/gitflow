@@ -55,6 +55,8 @@ OBJECTS = $(addprefix $(tempdir)/,$(notdir $(SOURCES:.c=.o)))
 SCRIPT_DIR = ./bin
 
 SCRIPT_SH += $(SCRIPT_DIR)/feature.sh
+SCRIPT_SH += $(SCRIPT_DIR)/merge.sh
+SCRIPT_SH += $(SCRIPT_DIR)/delete.sh
 SCRIPT_SH += $(SCRIPT_DIR)/gh-pages.sh
 SCRIPT_SH += $(SCRIPT_DIR)/init.sh
 SCRIPT_SH += $(SCRIPT_DIR)/patch.sh
