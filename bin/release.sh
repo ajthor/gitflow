@@ -87,7 +87,7 @@ else
 	# If the branch doesn't exist, create a release branch.
 	else
 		printf "Create: release branch $branch\n"
-		git checkout -b "$branch" development
+		git checkout -b "$branch" origin/development
 	fi
 fi
 
