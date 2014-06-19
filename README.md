@@ -8,6 +8,8 @@ Opinionated Git workflow scripts! For some excellent information on Git workflow
 
 The program is designed to be used in conjunction with Git, not instead of it. The commands are accessible using the `gitflow <command>` syntax. It doesn't take over the project (this is the least opinionated part of GitFlow) and you should be able to use the program whether you already have an active Git repo or are just creating one. Just use `git init` to make sure your project is set up for GitFlow.
 
+------
+
 ## Installation
 
 Download and compile the program using `make`. At the terminal:
@@ -16,26 +18,26 @@ Download and compile the program using `make`. At the terminal:
 
 The program will be installed to your `/usr/local/gitflow` folder, with a symlink in `/usr/local/bin` so that you can call GitFlow from anywhere you can call Git!
 
-
-Node.js users will soon be able to install the scripts using NPM:
-
-    npm install -g gitflow
-
 ## Usage
 
 GitFlow is an opinionated Git workflow tool with some serious ideas about how to organize your code. It is based on the ideas presented in Vincent Driessen's articles on Git workflows [here](http://nvie.com/). 
 
-There are four basic commands in GitFlow:
+There are six basic commands in GitFlow:
 
 - init
 - feature
-- patch
 - release
+- patch
+- merge
+- delete
 
 As well as one more command specific to GitHub:
 
 - gh-pages
 
+
+
+------
 
 ### Init
 
@@ -48,16 +50,12 @@ The `init` command sets up your project to use GitFlow. It creates a 'developmen
 - remote_url: the URL to your project (on GitHub/wherever)
 
 
+
 ### Feature
 
 Every update to your project comes from 'feature' branches. Use the `feature` command to create a new branch off of 'development'. This is where all of your development will go.
 
-    gitflow feature <branch_name> [-d | --delete] [-m | --merge] [<destination_branch>]
-
-- branch_name: the name of the feature branch you wish to create
-- -d: delete the branch
-- -m: merge the branch into 'development'
-- destination_branch: optionally specify a destination branch to merge into
+    gitflow feature <branch_name> [-d | --delete] [-m | --merge]
 
 
 ### Release
@@ -67,8 +65,6 @@ Once you have accumulated features and are ready to release a new version, use t
     gitflow release <semver_tag> [-d | --delete] [-m | --merge]
 
 - semver_tag: semantic versioning tag (e.g. 'v0.10.0-alpha')
-- -d: delete the branch
-- -m: merge branch into 'master' and 'development'
 
 
 ### Patch
@@ -78,8 +74,6 @@ If, after a release branch has been published, a bug is spotted, the `patch` com
     gitflow patch <issue_number> [-d | --delete] [-m | --merge]
 
 - issue_number: the number of the issue addressed by this fix (**NOTE:** Do not use the hash symbol when writing this number in he command)
-- -d: delete the branch
-- -m: merge branch into 'master' and 'development'
 
 
 ### Gh-Pages
@@ -91,6 +85,21 @@ The `gh-pages` command is specific to the documentation branch on GitHub. It cre
 - -c: make a first commit (even if it's empty)
 
 
+### Merge
+
+When you're ready to merge your branch into `development` or `master`, use this command either by specifying a branch name or while you have the branch you wish to merge checked out. It automatically detects whether the current branch is an issue branch, a feature branch, or a release branch, and merges accordingly.
+
+    gitflow merge [<branch_name>]
+
+
+### Delete
+
+The delete command does exactly what it says. Doesn't work on `development` or `master`, and, similar to the `merge` command, it doesn't need a branch name to be specified.
+
+    gitflow delete [<branch_name>]
+
+
+------
 
 ## Contributing
 
@@ -98,6 +107,7 @@ The project is under active development. Please contribute! I am not, in any sen
 
 It would also be useful to get a Git pro to help out with integrating the C part of the program with the Git API commands instead of relying on the shell scripts.
 
+------
 
 ## Un-Installation
 
