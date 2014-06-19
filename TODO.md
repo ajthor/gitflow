@@ -10,7 +10,5 @@ Future releases should add more commands to the gitflow repertoire, as well as m
 
 - bump.c - Add code to bump the version for release and issue/hotfix branches. Perhaps it is time to incorporate the semver.c file which is for now just sitting there.
 - init.sh - fix the initialization script to also use the git configuration.
-- init.sh - fix the initialization script for existing projects.
 - git hooks - add hooks to certain git processes to increase productivity.
-- merge.sh - add merge command to the program. Typing `gitflow feature branch -m` is a little unconventional. Perhaps `gitflow merge branch` is a little more intuitive.
-- delete.sh - add delete command to the program. See above. `gfl delete branch`
+- C migration - migrate shell scripts to C code (long-term)
