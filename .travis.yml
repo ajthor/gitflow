@@ -1,8 +1,6 @@
-language: c
-compiler:
-  - clang
-  - gcc
-script: sudo make install
+language: node_js
+node_js:
+  - "0.12"
 branches:
   except:
     - experimental

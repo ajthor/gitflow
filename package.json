@@ -9,6 +9,7 @@
     "lib": "./lib",
     "bin": "./bin"
   },
+  "preferGlobal": true,
   "description": "Opinionated Git workflow.",
   "scripts": {
     "test": "mocha"
