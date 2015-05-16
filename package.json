@@ -21,7 +21,9 @@
   "author": "ajthor",
   "license": "MIT",
   "dependencies": {
+    "async": "^0.9.0",
     "github": "^0.2.4",
-    "prompt": "^0.2.14"
+    "prompt": "^0.2.14",
+    "underscore": "^1.8.3"
   }
 }

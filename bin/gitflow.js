@@ -1,3 +1,11 @@
+'use strict';
+
+var fs = require('fs');
+var path = require('path');
+
+var _ = require('underscore');
+var async = require('async');
+
 var GitHubAPI = require('github');
 var prompt = require('prompt');
 
@@ -8,4 +16,21 @@ var github = new GitHubAPI({
 	protocol: 'https'
 });
 
+var gitflow = module.exports = function (options) {
+	this.options = _.defaults((options || {}), {
+		// GitFlow Defaults
 
+	}, this.options);
+};
+
+// _.extend(inkblot.prototype, require('./'));
+
+// GitFlow Prototype
+// -----------------
+_.extend(gitflow.prototype, {
+
+	run: function (command) {
+		console.log('the command is: ' + command);
+	}
+
+});
