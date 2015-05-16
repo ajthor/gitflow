@@ -1,0 +1,26 @@
+{
+  "name": "GitFlow",
+  "version": "0.1.0",
+  "main": "bin/gitflow.js",
+  "bin": {
+    "gitflow": "bin/cli.js"
+  },
+  "directories": {
+    "lib": "./lib",
+    "bin": "./bin"
+  },
+  "description": "Opinionated Git workflow.",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "GitFlow"
+  },
+  "author": "ajthor",
+  "license": "MIT",
+  "dependencies": {
+    "github": "^0.2.4",
+    "prompt": "^0.2.14"
+  }
+}
