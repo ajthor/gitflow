@@ -9,6 +9,7 @@ var async = require('async');
 var GitHubAPI = require('github');
 var prompt = require('prompt');
 
+// GitHub API object.
 var github = new GitHubAPI({
 	version: '3.0.0',
 
@@ -30,7 +31,7 @@ var gitflow = module.exports = function (options) {
 _.extend(gitflow.prototype, {
 
 	run: function (command) {
-		console.log('the command is: ' + command);
+
 	}
 
 });
