@@ -10,12 +10,6 @@ var gitflow = require('./gitflow.js');
 // =================
 // This is a typical Node.js CLI program.
 
-var usageMsg = 'usage:  gitflow <command> [options]';
-
-var usage = function () {
-	console.log(usageMsg);
-};
-
 // Parse Arguments
 // ---------------
 // Parses all arguments passed to the program.
@@ -23,7 +17,7 @@ var usage = function () {
 var parseArgv = function (argv) {
 	var i, arg;
 	var obj = {
-		command: '',
+		commands: [],
 		flags: [],
 		options: []
 	};
@@ -38,22 +32,32 @@ var parseArgv = function (argv) {
 			obj.flags.push(arg);
 
 			if (arg === '-h') {
-				usage();
 				process.exit(1);
 			}
 		}
 		else { // Command
-			obj.command = arg;
+			obj.commands.push(arg);
 		}
 	}
 
-	if (!obj.command) {
-		usage();
-		process.exit(1);
+	if (_.isEmpty(obj.commands)) {
+		process.exit(9);
 	}
 
 	return obj;
 };
+
+process.on('exit', function(code) {
+	switch (code) {
+		case 9:
+			console.log('INVALID ARGUMENT: Must provide a valid command to \'gitflow\'');
+			break;
+		case 1:
+			console.log('usage:  gitflow <command> [options]');
+			console.log('Valid Commands: \n  - init\n  - feature\n  - issue\n  - release');
+			break;
+	}
+});
 
 // CLI
 // ---
@@ -64,6 +68,4 @@ var obj = parseArgv(args);
 
 var utility = new gitflow(obj);
 
-utility.run(obj.command);
-
-
+utility.run(obj.commands);
