@@ -4,7 +4,7 @@
 
 var _ = require('underscore');
 
-var gitflow = require('./gitflow.js');
+var gitflow = require('../lib/gitflow.js');
 
 // Command-Line Tool
 // =================
