@@ -47,12 +47,16 @@ var parseArgv = function (argv) {
 	return obj;
 };
 
+// Handle Error Codes
+// ------------------
+
 process.on('exit', function(code) {
 	switch (code) {
 		case 9:
 			console.log('INVALID ARGUMENT: Must provide a valid command to \'gitflow\'');
 			break;
 		case 1:
+		// Default error code to exit program. Displays help text.
 			console.log('usage:  gitflow <command> [options]');
 			console.log('Valid Commands: \n  - init\n  - feature\n  - issue\n  - release');
 			break;
@@ -66,6 +70,4 @@ process.on('exit', function(code) {
 var args = process.argv.slice(2);
 var obj = parseArgv(args);
 
-var utility = new gitflow(obj);
-
-utility.run(obj.commands);
+gitflow.run(obj);
