@@ -36,7 +36,7 @@ var parseArgv = function (argv) {
 			}
 		}
 		else { // Command
-			obj.commands.push(arg);
+			Array.prototype.push.apply(obj.commands, [arg]);
 		}
 	}
 
@@ -53,12 +53,15 @@ var parseArgv = function (argv) {
 process.on('exit', function(code) {
 	switch (code) {
 		case 9:
-			console.log('INVALID ARGUMENT: Must provide a valid command to \'gitflow\'');
+			console.error('INVALID ARGUMENT: Must provide a valid command to \'gitflow\'\n');
+			// Default error code to exit program. Displays help text.
+			console.error('usage:  gitflow <command> [options]');
+			console.error('Valid Commands: \n  - init\n  - feature\n  - issue\n  - release');
 			break;
+		case 64:
+			console.error('ERROR: Could not authenticate user.');
 		case 1:
-		// Default error code to exit program. Displays help text.
-			console.log('usage:  gitflow <command> [options]');
-			console.log('Valid Commands: \n  - init\n  - feature\n  - issue\n  - release');
+			console.error('The program quit unexpectedly.');
 			break;
 	}
 });
